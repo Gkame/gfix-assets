@@ -3,18 +3,245 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Prueba GFIX</title>
+<title>GFIX · Servicio técnico de PC</title>
 <style>
-  body { margin: 0; background: #080d12; color: #f2f5f8; font-family: Arial, sans-serif; display: grid; place-items: center; min-height: 100vh; text-align: center; }
-  h1 { color: #f4b400; }
-  img { max-width: 80%; margin-top: 20px; }
+  :root {
+    --fondo: #080d12;
+    --panel: #111822;
+    --panel-2: #18212c;
+    --linea: #2a3848;
+    --texto: #f2f5f8;
+    --suave: #aeb9c6;
+    --naranja: #f4b400;
+    --magenta: #c000a0;
+    --magenta-claro: #e62bbd;
+    --cian: #00bfff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    background: var(--fondo);
+    color: var(--texto);
+    line-height: 1.5;
+    width: 100%;
+  }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; text-decoration: none; }
+  .contenedor { width: 100%; max-width: 1100px; margin: 0 auto; padding: 0 16px; }
+
+  /* ---------- CABECERA ---------- */
+  .cabecera {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(17, 24, 34, .85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--linea);
+  }
+  .cabecera .contenedor {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+  }
+  .logo { height: 40px; width: auto; }
+  .menu { display: flex; gap: 20px; }
+  .menu a { font-size: 14px; color: var(--suave); }
+  .menu a:hover { color: var(--naranja); }
+  .menu-boton { display: none; }
+  .menu-check { display: none; }
+
+  /* ---------- PORTADA ---------- */
+  .portada {
+    position: relative;
+    background:
+      linear-gradient(90deg, rgba(8,13,18,.95) 0%, rgba(8,13,18,.6) 60%, rgba(8,13,18,.3) 100%),
+      url("fondo.jpg") center / cover no-repeat;
+    padding: 90px 0 100px;
+  }
+  .portada h1 {
+    font-size: clamp(32px, 6vw, 56px);
+    line-height: 1.1;
+    max-width: 640px;
+  }
+  .portada h1 span { color: var(--naranja); }
+  .portada p {
+    margin-top: 18px;
+    max-width: 560px;
+    font-size: 17px;
+    color: var(--suave);
+  }
+  .botones { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+  .boton {
+    display: inline-block; padding: 13px 22px; border-radius: 10px;
+    font-weight: 700; font-size: 15px; border: 1px solid transparent;
+  }
+  .boton.principal { background: var(--naranja); color: #1a1200; }
+  .boton.secundario { border-color: var(--magenta); color: var(--texto); background: rgba(192,0,160,.12); }
+
+  /* ---------- SECCIONES ---------- */
+  .seccion { padding: 70px 0; border-top: 1px solid var(--linea); }
+  .seccion h2 {
+    font-size: 26px; margin-bottom: 8px;
+  }
+  .seccion h2 span { color: var(--magenta-claro); }
+  .seccion > .contenedor > p.intro { color: var(--suave); max-width: 640px; margin-bottom: 28px; }
+
+  .banner { border-radius: 14px; border: 1px solid var(--linea); margin-bottom: 28px; }
+
+  .tarjetas {
+    display: grid; gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  }
+  .tarjeta {
+    background: var(--panel-2);
+    border: 1px solid var(--linea);
+    border-top: 3px solid var(--naranja);
+    border-radius: 14px;
+    padding: 22px;
+  }
+  .tarjeta:nth-child(2n) { border-top-color: var(--magenta); }
+  .tarjeta h3 { font-size: 17px; margin-bottom: 8px; }
+  .tarjeta p { color: var(--suave); font-size: 14px; }
+
+  .proximamente {
+    background: var(--panel);
+    border: 1px dashed var(--linea);
+    border-radius: 14px;
+    padding: 28px;
+    color: var(--suave);
+  }
+
+  .contacto-datos { display: grid; gap: 14px; margin-top: 10px; }
+  .contacto-datos div {
+    background: var(--panel);
+    border: 1px solid var(--linea);
+    border-radius: 12px;
+    padding: 16px 18px;
+  }
+  .contacto-datos strong { display: block; color: var(--naranja); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+  .marcador { color: var(--muted, #718096); font-style: italic; }
+
+  .pie {
+    border-top: 1px solid var(--linea);
+    padding: 24px 0;
+    color: var(--suave);
+    font-size: 13px;
+    text-align: center;
+  }
+
+  /* ---------- CELULAR ---------- */
+  @media (max-width: 760px) {
+    .menu-boton {
+      display: inline-flex; flex-direction: column; gap: 5px;
+      padding: 8px; cursor: pointer;
+    }
+    .menu-boton span { width: 24px; height: 2px; background: var(--texto); }
+    .menu {
+      position: absolute; top: 64px; left: 0; right: 0;
+      flex-direction: column; gap: 0;
+      background: var(--panel);
+      border-bottom: 1px solid var(--linea);
+      display: none;
+    }
+    .menu a { padding: 14px 16px; border-top: 1px solid var(--linea); font-size: 15px; }
+    .menu-check:checked ~ .menu { display: flex; }
+    .portada { padding: 60px 0 70px; }
+    .seccion { padding: 50px 0; }
+  }
 </style>
 </head>
 <body>
-  <div>
-    <h1>Prueba de incrustación</h1>
-    <p>Si ves esto dentro de Google Sites, funciona.</p>
-    <img src="logo-gfix.png" alt="GFIX">
-  </div>
+
+  <!-- CABECERA -->
+  <header class="cabecera">
+    <div class="contenedor">
+      <a href="#inicio"><img class="logo" src="logo-gfix.png" alt="GFIX"></a>
+      <input type="checkbox" id="menu-check" class="menu-check">
+      <label for="menu-check" class="menu-boton" aria-label="Abrir menú"><span></span><span></span><span></span></label>
+      <nav class="menu">
+        <a href="#inicio">Inicio</a>
+        <a href="#servicios">Servicios</a>
+        <a href="#guias">Guías</a>
+        <a href="#clientes">Clientes</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- INICIO -->
+  <section id="inicio" class="portada">
+    <div class="contenedor">
+      <h1>Tu equipo, <span>al máximo</span></h1>
+      <p>Reparamos, optimizamos y mejoramos tu PC. Diagnóstico claro, trabajo prolijo y garantía en cada servicio.</p>
+      <div class="botones">
+        <a class="boton principal" href="#servicios">Ver servicios</a>
+        <a class="boton secundario" href="#contacto">Contactar</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICIOS -->
+  <section id="servicios" class="seccion">
+    <div class="contenedor">
+      <h2>Nuestros <span>servicios</span></h2>
+      <p class="intro">Desde una falla puntual hasta una máquina pensada para jugar o trabajar sin cortes.</p>
+      <img class="banner" src="baner-servicio.png" alt="Servicios GFIX">
+      <div class="tarjetas">
+        <div class="tarjeta">
+          <h3>Diagnóstico preciso</h3>
+          <p>Encontramos la causa real de la falla antes de tocar nada, y te explicamos qué pasa.</p>
+        </div>
+        <div class="tarjeta">
+          <h3>Optimización de equipos</h3>
+          <p>Limpieza, configuración y ajustes para que tu PC responda mejor día a día.</p>
+        </div>
+        <div class="tarjeta">
+          <h3>Upgrades y mejoras</h3>
+          <p>Más memoria, almacenamiento más rápido o componentes nuevos según lo que necesites.</p>
+        </div>
+        <div class="tarjeta">
+          <h3>Garantía en el servicio</h3>
+          <p>Cada trabajo tiene respaldo. Si algo vuelve a fallar por nuestro trabajo, lo resolvemos.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GUÍAS -->
+  <section id="guias" class="seccion">
+    <div class="contenedor">
+      <h2>Guías <span>técnicas</span></h2>
+      <p class="intro">Consejos para cuidar tu equipo.</p>
+      <div class="proximamente">Próximamente: artículos y consejos técnicos.</div>
+    </div>
+  </section>
+
+  <!-- CLIENTES -->
+  <section id="clientes" class="seccion">
+    <div class="contenedor">
+      <h2>Nuestros <span>clientes</span></h2>
+      <p class="intro">Trabajos y opiniones de quienes ya confiaron en GFIX.</p>
+      <div class="proximamente">Próximamente: trabajos y testimonios.</div>
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section id="contacto" class="seccion">
+    <div class="contenedor">
+      <h2>Ponete en <span>contacto</span></h2>
+      <p class="intro">Escribinos o pasá por el local.</p>
+      <div class="contacto-datos">
+        <div><strong>WhatsApp</strong><span class="marcador">[completar número]</span></div>
+        <div><strong>Email</strong><span class="marcador">[completar email]</span></div>
+        <div><strong>Dirección</strong><span class="marcador">[completar dirección]</span></div>
+        <div><strong>Horario</strong><span class="marcador">[completar horario]</span></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="pie">
+    <div class="contenedor">© GFIX · Servicio técnico de PC</div>
+  </footer>
+
 </body>
 </html>
